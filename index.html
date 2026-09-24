@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delta Force Giftcodes - Tổng Hợp & Copy Nhanh</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .copied {
+            background-color: #10B981 !important;
+            color: white !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen pb-12">
+
+    <!-- Header -->
+    <header class="bg-slate-800 border-b border-slate-700 py-6 mb-8 shadow-lg sticky top-0 z-50 backdrop-blur-md bg-opacity-90">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+                <h1 class="text-2xl font-black text-amber-500 tracking-wider">DELTA FORCE CODES</h1>
+                <p class="text-xs text-slate-400">Bấm để copy nhanh Giftcode vào game</p>
+            </div>
+            
+            <!-- Ô tìm kiếm -->
+            <div class="w-full sm:w-72">
+                <input type="text" id="searchInput" onkeyup="filterCodes()" placeholder="Tìm kiếm giftcode..." 
+                    class="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-amber-500">
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4">
+        <!-- Thống kê & Hướng dẫn -->
+        <div class="flex justify-between items-center mb-6">
+            <span id="codeCount" class="text-sm font-semibold text-slate-400">Đang tải danh sách...</span>
+            <span class="text-xs text-amber-400/80">💡 Mã đã copy sẽ đổi sang màu xanh</span>
+        </div>
+
+        <!-- Danh sách Giftcodes Grid -->
+        <div id="codeGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+            <!-- Items sẽ được Render qua Javascript -->
+        </div>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-emerald-600 text-white px-4 py-3 rounded-lg shadow-2xl opacity-0 transition-opacity duration-300 pointer-events-none text-sm font-bold flex items-center gap-2">
+        <span>✓</span> <span id="toastMsg">Đã copy code!</span>
+    </div>
+
+    <script>
+        // Danh sách toàn bộ Giftcode Delta Force từ hình ảnh
+        const giftCodes = [
+            // Khung trên - Cột 1
+            "PWC260419S65", "DFELEVATE16", "DFAWAKEN56", "PWC260418S84", "PWC260418S11", "PWC260418S72", "PWC260419S67", "PWC260419S84", "DFCCOPNOW111", "DFCCOPGIST88", "DFCCOPWOR1D", "DFCCOPTOBE03", "DFCCOPPL4Y3R5", "DFOSS260405B69", "DFOSS260405B58", "DFOSS260405B36", "DFDRAGONBOAT", "DFBrilliant165", "DF1314754", "JGHMCmxYa6PLcFgvD9mg", "DFOS2ZK8VA", "DFOSL5Q7MN", "DFOSB4N9RD", "PWC260418S79", "DFbeacon030", "DFCL503", "DFanchor945", "DFdragon504", "DFCONCORD82", "daichienboba6228", "daichienboba2719", "daichienboba6167", "daichienmobile7095", "daichienmobile3325", "daichienmobile7362", "DFOutstanding056", "DFReliable732", "DFForever395", "DFExcellent659", "DFRemarkable103",
+            
+            // Khung trên - Cột 2
+            "DFEssence982", "DFSerene218", "DFSpark119", "DFUltra220", "DFMagic057", "DFGalaxy250", "DFHorizon503", "TrickOrTreat", "DFNinja874", "DFRainbow356", "DFFlash260", "DFEnergy428", "DFoasis407", "DFeternity717", "DFFantasy742", "DFRocket825", "DFClover812", "DFHeroic668", "DFWizard309", "DFHarbor738", "DFpromise643", "DFceleste516", "DFvivid061", "DFRL1017", "DFSH428", "DFvoyage901", "DFjubilee594", "DFmomentum423", "DFsymphony104", "DFHORIZON91", "DFINSIGHT48", "DFRESOLVE19", "DFEMBARK63", "DFMoment479", "DFASCEND72", "DFPARAGON41", "DFGENESIS05", "DFCatalyst87", "DFAXIOM33", "DFClarity152",
+            
+            // Khung trên - Cột 3
+            "DFUT2025FINALS1549", "DFUT2025PLAYOFF5910", "DFUT2025PLAYOFF9163", "DFUT2025PLAYOFF2509", "DFUT2025PLAYOFF4827", "DFUT2025PLAYOFF8051", "DFUT2025PLAYOFF5732", "DFUT2025PLAYOFF1276", "GADFZebra", "DFOSS260404B57", "DFOSS260404B63", "DFOSS260404B47", "DFOSS260403B21", "DFOSS260403B33", "DFOSS260403B81", "DFOS7K2M9Q", "DFOS4XJ8PL", "DFOSW4D1YP", "DFsolace241", "DFUTW260412S95", "DFUTW260412S36", "DFUTW260412S99", "PWC260419S21", "HEDELTAFORCE3630", "HEDELTAFORCE4583", "HEDELTAFORCE7563", "HEDELTAFORCE8781", "DFSIXMAJOR6", "VIP666SOLDF", "SOLPROMAJOR", "DFFILE274", "DFTRNG469", "MOILOOT92", "DFSIXVIP888", "ACESIXMAJOR", "DFWEEK237", "SOLDFWIN360", "MOILOOT55", "MOILOOT68",
+
+            // Khung trên - Cột 4
+            "MOILOOT48", "MOILOOT02", "MOILOOT04", "MOILOOT60", "MOILOOT45", "DFCRAFT427", "DFPACK293", "SIXMAJORMVP", "VIP777SIXDF", "DFARMX46", "DFAMMO08", "DFTURING09", "HEDELTAFORCE8032", "HEDELTAFORCE9026", "MOILOOT65", "MOILOOT79", "TRILLIONRAID1000", "TRILLIONRAID600", "TRILLIONRAID300", "POC3105S95", "POC3105S96", "POC3105S73", "POC3105S64", "POC3105S31", "POC3105S90", "POC3005S19", "POC3005S52", "POC3005S99", "POC3005S59", "POC3005S53", "POC3005S51", "DFWITNESS77", "DFOS3FZ9LK", "DFOS7Q2VXA", "ReturningWarrior3", "ReturningWarrior1", "fvzeLrxYajwVviFSTSZ", "ReturningWarrior2",
+
+            // Khung trên - Cột 5
+            "N4SQWgxYcHw7gUci3bJy", "Top1BXHVN", "aCuQjtxY7VxGjxCTBnQU", "A5Z1NDW8K3PJLU", "10KSUBSYOUTUBEDFRTNK", "DFExceptional305", "DFVANGUARD76", "GARENADFNY2501E034", "GARENADFNY2501H258", "C7S2X9J5D4B1V3Q", "GARENADFCBT2503Z6T9", "GARENADFCBT2503X9D1", "GARENADFCBT2503C3F4", "GARENADFID2501V621", "GARENADFID2501L983", "GARENADFID2501R572", "DELTAFORCEVN_8MD718JT4GR", "DELTAFORCEVN_95S092Y9T9D", "DELTAFORCEVN_6AVHJ6MYX6Y", "DELTAFORCEVN_540VN2S550U", "DFUTSCARH", "DFUTWEAPON", "DFUTGEARTICKET", "DFUTINTERMEDIATE", "DFUTSUPPYPACK", "DFUTARMAMENT", "SsCKDfxY5AkdZqjLLkXq", "yWHtfsxYGRPaZvAfLN82", "DFakaonikou", "85ewn4XyBJfncPKbADR", "hjRtrkXyLmcTyYcEY64H", "f2x6e3xY3pJdCE5rT7P", "Bd52XmxyYJ2DFGcqnq4", "msz7hMxxYyGhip8ay7HpK", "MOBILE0123",
+
+            // Khung dưới
+            "DFUTS26QL3101C64", "DFUTS26QL3101C38", "DFUTS26QL3001C47", "DFUTS26QL1", "DFUTS26QL6", "DFUTS26QL5", "DFUTS26GR2702C44", "DFUTS26GR2702C57", "DFUTS26GR2702C92", "DFUTS26GR2802C23", "DFUTS26GR2802C66", "DFUTS26GR2802C78", "DFUTS26GR0103C35", "DFUTS26GR0103C81", "DFUTS26GR0103C49", "DFUTS26GR0703C34", "DFUTS26GR0703C96", "DFUTS26GR1203C72", "DFUTS26GR1203C83", "DFUTS26GR1203C46", "DFUTS26GR1303C65", "DFUTS26GR1303C39", "DFUTS26GR1303C98", "DFUTS26GR1403C24", "DFUTS26GR1403C87", "DFUTS26GR1403C52", "DFCC0001", "DFCCEIEl01", "DFCCHAHA5", "DFUTS26GR1503C33", "DFUTS26GR1503C91", "DFUTS26GR1503C74", "LAISEGAME", "DFUTS26PL2103C32", "DFUTS26PL2103C41", "DFUTS26PL2103C68", "DFUTS26PL2103C54", "DFUTS26PL2103C85", "DFUTS26PL2103C90", "DFUTS26PL2203C28", "DFUTS26PL2203C43", "DFUTS26PL2203C61", "DFUTS26PL2203C77", "DFUTS26PL2203C86", "DFUTS26PL2203C95", "DFVS3S7FR4", "DFVS8T9SZ4", "DFVSH5N4C7", "DFVSU2X6M8", "DFVSW1C5D9", "DFVSE4K7G1", "DFCCOPWINEIEl", "DF425SOL", "DFWIN777", "DFHUNTER666", "DFAIM666", "DFGOGOGO425", "DFGiveMeBrick425", "DFLuckyLucky425", "DF425BountyS2"
+        ];
+
+        // Render giao diện
+        const grid = document.getElementById('codeGrid');
+        const countText = document.getElementById('codeCount');
+
+        function renderCodes(list) {
+            grid.innerHTML = '';
+            countText.innerText = `Tổng cộng: ${list.length} codes`;
+            
+            list.forEach(code => {
+                const card = document.createElement('div');
+                card.className = "code-card bg-slate-800 border border-slate-700 hover:border-amber-500 rounded-lg p-3 flex items-center justify-between gap-2 transition duration-150";
+                card.innerHTML = `
+                    <span class="font-mono text-sm font-semibold tracking-wide text-slate-200 truncate select-all">${code}</span>
+                    <button onclick="copyCode(this, '${code}')" class="btn-copy bg-slate-700 hover:bg-amber-500 hover:text-slate-900 text-xs font-bold py-1.5 px-3 rounded transition duration-150 shrink-0">
+                        COPY
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Hàm Copy nhanh
+        function copyCode(btn, code) {
+            navigator.clipboard.writeText(code).then(() => {
+                // Đổi style button đã copy
+                btn.innerText = "ĐÃ COPY";
+                btn.classList.add("copied");
+                btn.parentElement.classList.add("border-emerald-500");
+
+                // Hiển thị Toast
+                showToast(`Đã copy: ${code}`);
+            });
+        }
+
+        // Thông báo Toast
+        let toastTimeout;
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = message;
+            toast.classList.remove('opacity-0');
+            
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.add('opacity-0');
+            }, 2000);
+        }
+
+        // Lọc code khi tìm kiếm
+        function filterCodes() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = giftCodes.filter(c => c.toLowerCase().includes(query));
+            renderCodes(filtered);
+        }
+
+        // Chạy ban đầu
+        renderCodes(giftCodes);
+    </script>
+</body>
+</html>
