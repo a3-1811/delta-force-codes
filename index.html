@@ -128,7 +128,7 @@
             break;
         }
 
-        await delay(300);
+        await delay(100);
 
         const btnExchange = document.querySelector('a[class="spr btn-exchange"]') || document.querySelector('.btn-exchange');
         if (btnExchange) {
@@ -138,12 +138,12 @@
             break;
         }
 
-        await delay(2500);
+        await delay(900);
 
         const btnClose = document.querySelector('[class="btn-close"]') || document.querySelector('.btn-close');
         if (btnClose) {
             simulateClick(btnClose);
-            await delay(500);
+            await delay(200);
         }
     }
 
